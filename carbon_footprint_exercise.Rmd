@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(readxl)
 library(lubridate)
 library(dplyr)
@@ -120,13 +120,11 @@ consumption_joined <- consumption %>%
   group_by(country, year, site, energy_type) %>% 
   summarise(tonCO2e = sum(tonCO2e)) %>% 
   ungroup()
-
-print(consumption_joined)
 ```
 
 ## Data visualization
 
-```{r}
+```{r echo=FALSE}
 ggplot(consumption_joined %>% 
          filter(energy_type == "Electricity"), 
        aes(fill = site, y=tonCO2e, x=year)) +
@@ -139,7 +137,7 @@ ggplot(consumption_joined %>%
        subtitle ="Broken down by sites for each country")
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(consumption_joined %>% 
          filter(energy_type != "Electricity"), 
        aes(fill = energy_type, y=tonCO2e, x=year)) +
@@ -152,7 +150,7 @@ ggplot(consumption_joined %>%
        subtitle ="Broken down by energy types for each country")
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(consumption_joined, aes(fill=country, y=tonCO2e, x=year)) +
   geom_bar(position="stack", stat="identity") +
   facet_wrap(~energy_type, scales = "free") + 
